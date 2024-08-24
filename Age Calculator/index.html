@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="calculator">
+            <h1>Javascript<br><span>Age Calculator</span></h1>
+            <div class="input-box">
+                <input type="date" id="date">
+                <button onclick="calculateAge()">Calculate</button>
+            </div>
+            <p id="result"></p>
+        </div>
+    </div>
+    
+    <script>
+    
+    let userInput = document.getElementById("date");
+    let result = document.getElementById("result")
+    userInput.max = new Date().toISOString().split("T")[0];
+
+    function calculateAge(){
+        let birthDate = new Date(userInput.value);
+        let d1 = birthDate.getDate();
+        let m1 = birthDate.getMonth() + 1;
+        let y1 = birthDate.getFullYear();
+
+        let today = new Date();
+
+        let d2 = today.getDate();
+        let m2 = today.getMonth() + 1;
+        let y2 = today.getFullYear();
+        
+        let d3, m3, y3;
+        y3 = y2 - y1;
+
+        if(m2 >= m1){
+            m3 = m2 - m1;
+        }else{
+            y3--;
+            m3 = 12 + m2 - m1;
+        }
+
+        if(d2 >= d1){
+            d3 = d2 - d1;
+        }else{
+            //If the current day is less than the birth day, it adjusts the month difference by subtracting 1.
+            m3--;
+            //calculates the number of days by adding the number of days in the previous month to the difference.
+            d3 = getDaysInMonth(y1, m1) + d2 - d1;
+        }
+
+        if(m3 < 0){
+            //Ensures that the months difference (m3) is non-negative. If m3 is negative, it adjusts m3 to 11 (the last month of the previous year) and decrements the year difference (y3).
+            m3 = 11;
+            y3--;
+        }
+        result.innerHTML = `You are <span>${y3}</span> years, <span>${m3}</span> months and <span>${d3}</span> days old`
+    }
+
+    function getDaysInMonth(year, month){
+        //Returns the number of days in a given month of a given year. It creates a Date object for the last day of the month by setting the date to 0 (which effectively gives the last day of the previous month). For example, new Date(2024, 8, 0).getDate() returns 31, the number of days in August 2024.
+        return new Date(year, month, 0).getDate();
+    }
+
+    </script>
+
+</body>
+</html>
